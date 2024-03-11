@@ -1,3 +1,0 @@
-/home/bravegeek/Projects/Cpp/Labs/cmake-build-debug/CMakeFiles/Labs.dir
-/home/bravegeek/Projects/Cpp/Labs/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/bravegeek/Projects/Cpp/Labs/cmake-build-debug/CMakeFiles/rebuild_cache.dir
