@@ -3,10 +3,12 @@
 
 // Функция для преобразования бинарного дерева в сильно ветвящееся дерево
 NaryTree *convertToNaryTree(BinaryTree *root, NaryTree *naryTreeRoot) {
+    // Если у вершины нет детей, то выходим из рекурсии
     if (root == NULL) {
         return NULL;
     }
 
+    // Если не создан корень ветвящегося дерева, создаем
     if (naryTreeRoot == NULL) {
         naryTreeRoot = newNaryTreeNode(root->data);
 
@@ -21,6 +23,7 @@ NaryTree *convertToNaryTree(BinaryTree *root, NaryTree *naryTreeRoot) {
     BinaryTree *leftBinaryNode = root->left;
     BinaryTree *rightBinaryNode = root->right;
 
+    // Рекурсивно добавляем левые и правые вершины бинарного дерева в сильно ветвящееся
     if (leftBinaryNode != NULL) {
         NaryTree *leftNaryNode = newNaryTreeNode(leftBinaryNode->data);
         addNaryTreeChildNode(naryTreeRoot, leftNaryNode);
@@ -36,8 +39,8 @@ NaryTree *convertToNaryTree(BinaryTree *root, NaryTree *naryTreeRoot) {
     return naryTreeRoot;
 }
 
-// Вывод массива в файл
-void printTreeToFile(NaryTree *root, int count, FILE *file) {
+// Вывод дерева в файл
+void printTreeToFile(NaryTree *root, FILE *file) {
     fprintf(file, "%d\n", root->data);
     if (root->children_count == 0) {
         fprintf(file, " NULL\n");
@@ -59,20 +62,7 @@ BinaryTree *findBinaryNode(BinaryTree **nodes, int count, int data) {
     return NULL;
 }
 
-void addBinaryNodeToArr(BinaryTree *node, BinaryTree **arr, int *count) {
-    // не добавляем узел если он 0
-    if (node->data == 0) {
-        return;
-    }
-
-    arr[*count] = node;
-}
-
-
 int main() {
-    printf("Start!\n");
-
-
     // Выделяем память под бинарное дерево и инициализируем переменные
     BinaryTree *binaryTree = (BinaryTree *) malloc(sizeof(BinaryTree));
     BinaryTree **nodesArr = NULL;
@@ -103,7 +93,7 @@ int main() {
         // Ищем элемент с отсканированным ключом в массиве
         currentNode = findBinaryNode(nodesArr, count, data);
 
-        // Если data != 0 (0 - нет потомка), то добавляем левый потомок
+        // Если есть существующая вершина (data != 0, 0 - нет потомка), то добавляем левый потомок
         if ((temp = addLeftChild(currentNode, left)) != NULL) {
             nodesArr = (BinaryTree **) realloc(nodesArr, sizeof(BinaryTree *) * (count + 1));
             nodesArr[count] = temp;
@@ -111,20 +101,18 @@ int main() {
             ++count;
         }
 
-        // Если data != 0 (0 - нет потомка), то добавляем правый потомок
+        // Если есть существующая вершина (data != 0, 0 - нет потомка), то добавляем правый потомок
         if ((temp = addRightChild(currentNode, right)) != NULL) {
             nodesArr = (BinaryTree **) realloc(nodesArr, sizeof(BinaryTree *) * (count + 1));
             nodesArr[count] = currentNode;
 
             ++count;
         }
-
-        // Если не найдена связующая вершина - игнорируем
     }
 
     NaryTree *naryTreeRoot = NULL;
     naryTreeRoot = convertToNaryTree(binaryTree, naryTreeRoot);
-    printTreeToFile(naryTreeRoot, count, outFile);
+    printTreeToFile(naryTreeRoot, outFile);
 
     fclose(inFile);
     fclose(outFile);
