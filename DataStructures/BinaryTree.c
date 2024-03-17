@@ -1,7 +1,3 @@
-//
-// Created by bravegeek on 09.03.2024.
-//
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -11,15 +7,6 @@ typedef struct BinaryTree {
     struct BinaryTree* left;
     struct BinaryTree* right;
 } BinaryTree;
-
-// Функция для создания нового узла бинарного дерева
-//BinaryTree* newBinaryTreeNode(int data) {
-//    BinaryTree* node = (BinaryTree*)malloc(sizeof(BinaryTree));
-//    node->data = data;
-//    node->left = NULL;
-//    node->right = NULL;
-//    return node;
-//}
 
 // добавление левого потомка
 BinaryTree* addLeftChild(BinaryTree* node, int data) {
@@ -34,11 +21,15 @@ BinaryTree* addLeftChild(BinaryTree* node, int data) {
 
     node->left = childNode;
 
-    return node;
+    return childNode;
 }
 
 // добавление правого потомка
 BinaryTree* addRightChild(BinaryTree* node, int data) {
+    if (data == 0) {
+        return NULL;
+    }
+
     BinaryTree* childNode = (BinaryTree*)malloc(sizeof(BinaryTree));
     childNode->data = data;
     childNode->left = NULL;
@@ -46,5 +37,13 @@ BinaryTree* addRightChild(BinaryTree* node, int data) {
 
     node->right = childNode;
 
-    return node;
+    return childNode;
+}
+
+void freeTree(BinaryTree* root) {
+    if (root != NULL) {
+        freeTree(root->left); // Рекурсивное освобождение левого поддерева
+        freeTree(root->right); // Рекурсивное освобождение правого поддерева
+        free(root); // Освобождение текущего узла
+    }
 }

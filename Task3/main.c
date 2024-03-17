@@ -1,79 +1,66 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
-
-// Определение структуры для узла дерева
-typedef struct Node {
-    int departmentId;
-    char departmentName[31];
-    char chiefName[26];
-    struct Node *left, *right;
-} Node;
-
-// Функция создания нового узла
-Node* createNode(int id) {
-    Node* newNode = (Node*)malloc(sizeof(Node));
-    newNode->departmentId = id;
-    snprintf(newNode->departmentName, 31, "Dept %d", id); // Примерное наименование
-    snprintf(newNode->chiefName, 26, "Chief %d", id); // Примерное имя начальника
-    newNode->left = newNode->right = NULL;
-    return newNode;
-}
-
-// Функция вставки узла в дерево
-Node* insertNode(Node* root, int id) {
-    if (root == NULL) return createNode(id);
-
-    if (id < root->departmentId)
-        root->left = insertNode(root->left, id);
-    else
-        root->right = insertNode(root->right, id);
-
-    return root;
-}
+#include "../DataStructures/SearchTree.c"
 
 // Функция для вывода дерева в виде триплетов
-void printTree(Node* root) {
+void printTree(SearchTree * root) {
     if (root != NULL) {
-        printf("Вершина: %d, Левый сын: %s, Правый сын: %s\n",
+        printf("Вершина: \"%d\",\n Левый узел: \"%s\",\n Ключ левого узла:\"%d\",\n Правый узел: \"%s\",\n Ключ правого узла: \"%d\"\n\n",
                root->departmentId,
                root->left ? root->left->departmentName : "нет",
-               root->right ? root->right->departmentName : "нет");
+               root->left ? root->left->departmentId : -1,
+               root->right ? root->right->departmentName : "нет",
+               root->right ? root->right->departmentId : -1
+               ),
         printTree(root->left);
         printTree(root->right);
     }
 }
 
-void freeTree(Node* root) {
-    if (root != NULL) {
-        freeTree(root->left); // Рекурсивное освобождение левого поддерева
-        freeTree(root->right); // Рекурсивное освобождение правого поддерева
-        free(root); // Освобождение текущего узла
-    }
-}
-
 int main() {
-    int n, i, id;
-    Node* root = NULL;
-
-    printf("Введите количество элементов: ");
-    scanf("%d", &n);
-
-    srand(time(NULL)); // Инициализация генератора случайных чисел
-
-    for (i = 0; i < n; i++) {
-        id = rand() % 100; // Генерация случайного номера подразделения
-        printf("%d ", id);
-        root = insertNode(root, id);
+    // Считывание данных из файла
+    FILE* file = fopen("input.txt", "r");
+    if (!file) {
+        perror("Failed to open file");
+        return 1;
     }
 
-    printf("\n");
+    // Считываем количество записей
+    int n;
+    fscanf(file, "%d", &n);
+    printf("Считываем %d записей...\n", n);
 
-    printf("Дерево поиска в виде списка триплетов:\n");
+    // Инициализируем переменные
+    SearchTree* root = NULL;
+    int key;
+    char departmentName[31];
+    char chiefName[26];
+
+    // Считываем триплеты из файла
+    for (int i = 0; i < n + 1; ++i) {
+        fscanf(file, "%d,"
+                     "%[^,],"  /* use "name:%s" if you want the quotes */
+                     "%[^\n]\n",
+                     &key, departmentName, chiefName);
+        root = insertNode(root, key, departmentName, chiefName);
+    }
+
+    // Закрываем файл
+    fclose(file);
+
     printTree(root);
 
-    freeTree(root); // Освобождение памяти, занятой деревом
+    printf("Введите ключ записи, который нужно удалить:\n");
+    scanf("%d", &key);
+    printf("Удаляем запись с ключом: %d\n");
+
+    deleteNode(root, key, 0);
+
+    printTree(root);
+
+    // Освобождаем память
+    freeSearchTree(root);
     return 0;
 }
 

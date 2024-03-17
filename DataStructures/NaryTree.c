@@ -1,8 +1,3 @@
-//
-// Created by bravegeek on 09.03.2024.
-//
-
-#include "NaryTree.h"
 #include "stdlib.h"
 
 // Структура узла сильно ветвящегося дерева
@@ -13,7 +8,7 @@ typedef struct NaryTree {
 } NaryTree;
 
 // Функция для добавления узла в сильно ветвящееся дерево
-void addNaryTreeNode(NaryTree* parent, NaryTree* child) {
+void addNaryTreeChildNode(NaryTree* parent, NaryTree* child) {
     parent->children_count++;
     parent->children = realloc(parent->children, parent->children_count * sizeof(NaryTree*));
     parent->children[parent->children_count - 1] = child;
@@ -26,4 +21,16 @@ NaryTree* newNaryTreeNode(int data) {
     node->children = NULL;
     node->children_count = 0;
     return node;
+}
+
+void freeNaryTree(NaryTree* root) {
+    if (root != NULL) {
+        for (int i = 0; i < root->children_count; ++i) {
+            if (root->children[i] != NULL) {
+                freeTree(root->children[i]);
+            }
+        }
+
+        free(root);
+    }
 }

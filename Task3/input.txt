@@ -1,0 +1,6 @@
+4
+10,Software Development,Smith J.J.
+12,Research and Development,Brown M.D.
+9,Human Resources,Johnson E.R.
+11,Marketing,Williams A.S.
+5,Information Technology,Davis B.L.
