@@ -1,1 +1,10 @@
 /cmake-build-debug/
+.idea
+
+./Task1/output.txt
+./Task2/output.txt
+./Task3/output.txt
+
+./Task1/main
+./Task2/main
+./Task3/main
