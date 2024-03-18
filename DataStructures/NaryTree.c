@@ -27,7 +27,7 @@ void freeNaryTree(NaryTree* root) {
     if (root != NULL) {
         for (int i = 0; i < root->children_count; ++i) {
             if (root->children[i] != NULL) {
-                freeTree(root->children[i]);
+                freeNaryTree(root->children[i]);
             }
         }
 

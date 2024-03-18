@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "string.h"
+#include "stdio.h"
 
 typedef struct SearchTree {
     int departmentId;
@@ -14,6 +15,7 @@ SearchTree* createNode(int key, const char* departmentName, const char* chiefNam
     SearchTree* newNode = (SearchTree*)malloc(sizeof(SearchTree));
     if (!newNode) return NULL; // Проверка выделения памяти
 
+    // Присваиваем новой вершине значения из триплета
     newNode->departmentId = key;
     newNode->left = newNode->right = newNode->parent = NULL;
     strncpy(newNode->departmentName, departmentName, 30);

@@ -6,6 +6,7 @@
 // Функция для вывода дерева в виде триплетов
 void printTree(SearchTree * root) {
     if (root != NULL) {
+        // Выводим ключ дочернего узла -1 если узла нет
         printf("Вершина: \"%d\",\n Левый узел: \"%s\",\n Ключ левого узла:\"%d\",\n Правый узел: \"%s\",\n Ключ правого узла: \"%d\"\n\n",
                root->departmentId,
                root->left ? root->left->departmentName : "нет",
@@ -49,6 +50,7 @@ int main() {
     // Закрываем файл
     fclose(file);
 
+    // Выводим дерево
     printTree(root);
 
     printf("Введите ключ записи, который нужно удалить:\n");
